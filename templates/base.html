@@ -50,7 +50,7 @@
         <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="{% url 'inicio' %}">
+        <a class="navbar-brand" href="{% url 'viajes_app:inicio' %}">
             Inicio
         </a>
 
@@ -64,13 +64,13 @@
             <ul class="navbar-nav ms-auto py-4 py-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'crear_viaje' %}">
+                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'viajes_app:crear_viaje' %}">
                         Crear Viaje
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'listar_viajes' %}">
+                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'viajes_app:listar_viajes' %}">
                         Lista de Viajes
                     </a>
                 </li>

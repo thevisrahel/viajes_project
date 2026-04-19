@@ -19,12 +19,24 @@
 {% for viaje in viajes %}
     <div style="border:1px solid #ccc; padding:10px; margin:10px;">
         <h3>
-            <a href="{% url 'detalle_viaje' viaje.id %}">
-                {{ viaje.destino }}
-            </a>
+        <a href="{% url 'viajes_app:detalle_viaje' viaje.id %}">
+            {{ viaje.destino }}
+        </a>
+
         </h3>
         <p>{{ viaje.fecha }}</p>
         <p>{{ viaje.descripcion }}</p>
+            <a href="{% url 'viajes_app:actualizar_viaje' viaje.id %}">
+                Actualizar | 
+            </a>
+
+<form action="{% url 'viajes_app:eliminar_viaje' viaje.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+
+    <a href="#" onclick="if(confirm('¿Seguro que quieres eliminar este viaje?')) { this.closest('form').submit(); } return false;">
+        Eliminar
+    </a>
+</form>
     </div>
 {% endfor %}
 </ul>

@@ -7,4 +7,4 @@ class Viaje(models.Model):
     imagen = models.ImageField(upload_to='viajes/', null=True, blank=True)
     
     def __str__(self):
-        return self.destino
+        return f'Viaje: {self.destino}'

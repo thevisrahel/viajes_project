@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Viaje
 from .forms import ViajeForm
 
@@ -39,3 +39,27 @@ def listar_viajes(request):
 def detalle_viajes(request, id_viaje):
     viaje = Viaje.objects.get(id=id_viaje)
     return render(request, 'viajes_app/detalle_viajes.html', {'viaje': viaje})
+
+
+
+def actualizar_viajes(request, id_viaje):
+    viaje = get_object_or_404(Viaje, id=id_viaje)
+
+    if request.method == "POST":
+        formulario = ViajeForm(request.POST, request.FILES, instance=viaje)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('viajes_app:listar_viajes')
+
+    else:
+        formulario = ViajeForm(instance=viaje)
+
+    return render(request, 'viajes_app/actualizar_viajes.html', {
+        'formulario': formulario,
+        'viaje': viaje
+    })
+
+def eliminar_viajes(request, id_viaje):
+    viaje = get_object_or_404(Viaje, id=id_viaje)
+    viaje.delete()
+    return redirect('viajes_app:listar_viajes')

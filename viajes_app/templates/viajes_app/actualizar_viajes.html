@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block texto_pestania  %}
+    Actualizar viaje
+{% endblock  %}
+
+{% block header_h1%}
+    ACTUALIZAR VIAJE
+{% endblock %}
+
+{% block contenido %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ formulario.as_p }}
+
+    <input type="submit" value="Actualizar">
+</form>
+
+{% if mensaje %}
+    <p>{{ mensaje }}</p>
+{% endif %}
+
+{% endblock %}
