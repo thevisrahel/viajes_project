@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block texto_pestania %}
+    Detalle de viaje
+{% endblock %}
+
+{% block header_imagen %}
+    {% if viaje.imagen %}
+        {{ viaje.imagen.url }}
+    {% else %}
+        {% static 'assets/img/about-bg.jpg' %}
+    {% endif %}
+{% endblock %}
+
+{% block header_h1 %}
+    Viaje:
+    {% if viaje.sitio_turistico %}
+        {{ viaje.sitio_turistico }}
+    {% else %}
+        {{ viaje.region }}
+    {% endif %}
+{% endblock %}
+
+{% block contenido %}
+
+<div class="container mt-4">
+
+    <!-- VOLVER -->
+    <div class="mb-4">
+        <a href="{% url 'usuarios:ver_perfil' usuario.username %}"
+           class="btn btn-outline-secondary btn-sm">
+            ← Volver al perfil de {{ usuario.username }}
+        </a>
+    </div>
+
+    <!-- INFO DEL VIAJE -->
+    <div class="card shadow-sm border-0 p-4 mb-4">
+
+        <h4 class="mb-3">Información del viaje</h4>
+
+        <p class="mb-3">
+            <strong>Descripción:</strong><br>
+            <span class="text-muted">
+                {{ viaje.descripcion|default:"Sin descripción" }}
+            </span>
+        </p>
+
+<div class="row justify-content-center align-items-center text-center mt-3">
+
+    <!-- PAÍS -->
+    <div class="col-md-3 mb-3">
+        <strong>🌎 País</strong><br>
+        <span class="text-muted">
+            {{ viaje.pais|default:"No especificado" }}
+        </span>
+    </div>
+
+    <!-- LIKE -->
+    <div class="col-md-2 mb-3 d-flex justify-content-center">
+
+        <form action="{% url 'viajes_app:toggle_like' viaje.id %}"
+              method="post"
+              class="d-flex flex-column align-items-center">
+            {% csrf_token %}
+
+            <button type="submit"
+                    style="border:none; background:none; font-size:26px; cursor:pointer; transition:0.2s;"
+                    onmouseover="this.style.transform='scale(1.2)'"
+                    onmouseout="this.style.transform='scale(1)'">
+
+                <span style="color: red;">❤️</span>
+
+            </button>
+
+            <span class="text-muted small mt-1">
+                {{ viaje.likes.count }}
+            </span>
+
+        </form>
+
+    </div>
+
+    <!-- FECHA -->
+    <div class="col-md-3 mb-3">
+        <strong>📅 Fecha</strong><br>
+        <span class="text-muted">
+            {{ viaje.fecha|date:"d M Y" }}
+        </span>
+    </div>
+
+</div>
+    <!-- FOTOS -->
+    <div class="card shadow-sm border-0 p-4">
+
+        <h4 class="mb-3">Fotos del viaje</h4>
+
+        {% if viaje.foto_set.exists %}
+
+            <div class="row g-3">
+
+                {% for foto in viaje.foto_set.all %}
+                    <div class="col-12 col-md-6 col-lg-4">
+
+                        <div class="card h-100 shadow-sm border-0">
+
+                            <img src="{{ foto.imagen.url }}"
+                                 class="card-img-top"
+                                 style="height: 220px; object-fit: cover;">
+
+                            <div class="card-body">
+
+                                {% if foto.descripcion %}
+                                    <p class="card-text text-muted small mb-0">
+                                        {{ foto.descripcion }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="alert alert-light text-center text-muted">
+                📷 No hay fotos aún en este viaje
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block header_h1 %}
-    PERFIL DE "{{ request.user.username }}"
+    PERFIL DE "{{ user.username }}"
 {% endblock %}
 
 {% block contenido %}
@@ -13,32 +13,51 @@
 <div class="container mt-5">
 
     <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
 
-        <div class="col-md-6">
+            <div class="card shadow-sm border-0 p-4 text-center">
 
-            <div class="card shadow-sm p-4 text-center">
-
-
-                {% if request.user.info.avatar %}
-                    <img src="{{ request.user.info.avatar.url }}"
+                <!-- AVATAR -->
+                {% if user.info and user.info.avatar %}
+                    <img src="{{ user.info.avatar.url }}"
                          class="rounded-circle mx-auto mb-3"
                          width="120" height="120"
                          style="object-fit: cover;">
                 {% else %}
-                    <div class="mb-3">
-                        <div class="bg-secondary rounded-circle mx-auto"
-                             style="width:120px;height:120px;"></div>
-                        <p class="text-muted mt-2">Sin avatar</p>
-                    </div>
+                    <div class="rounded-circle bg-secondary mx-auto mb-3"
+                         style="width:120px;height:120px;"></div>
+                    <small class="text-muted">Sin avatar</small>
                 {% endif %}
 
-                <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
-                <p class="text-muted">{{ request.user.email }}</p>
+                <!-- NOMBRE -->
+                <h4 class="mb-1">
+                    {{ user.first_name }} {{ user.last_name }}
+                </h4>
+                <p class="text-muted mb-3">{{ user.email }}</p>
+
+                <!-- ESTADÍSTICAS -->
+                <div class="d-flex justify-content-center gap-5 mb-3">
+
+                    <div>
+                        <h6 class="mb-0">{{ seguidores }}</h6>
+                        <small class="text-muted">Seguidores</small>
+                    </div>
+
+                    <div>
+                        <h6 class="mb-0">{{ siguiendo }}</h6>
+                        <small class="text-muted">Siguiendo</small>
+                    </div>
+
+                </div>
 
                 <hr>
 
-                <p><strong>Fecha de nacimiento:</strong><br>
-                    {{ request.user.info.fecha_nacimiento }}
+                <!-- INFO -->
+                <p class="mb-2">
+                    <strong>Fecha de nacimiento</strong><br>
+                    <span class="text-muted">
+                        {{ user.info.fecha_nacimiento|default:"No registrada" }}
+                    </span>
                 </p>
 
                 <!-- BOTONES -->
@@ -50,17 +69,32 @@
                     </a>
 
                     <a href="{% url 'usuarios:actualizar_password' %}"
-                       class="btn btn-warning text-white">
+                       class="btn btn-outline-warning">
                         Cambiar contraseña
                     </a>
 
-                    <form action="{% url 'usuarios:eliminar_avatar' %}"
-                          method="post">
+                    <form action="{% url 'usuarios:eliminar_avatar' %}" method="post">
                         {% csrf_token %}
                         <button type="submit"
-                                class="btn btn-danger w-100 mt-2">
+                                class="btn btn-outline-danger w-100">
                             Eliminar avatar
                         </button>
+                    </form>
+
+                    <!-- PRIVACIDAD -->
+                    <form action="{% url 'usuarios:toggle_privacidad' %}" method="post">
+                        {% csrf_token %}
+
+                        {% if user.info.es_privado %}
+                            <button type="submit" class="btn btn-warning w-100">
+                                🔒 Perfil privado — hacerlo público
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-secondary w-100">
+                                🌐 Perfil público — hacerlo privado
+                            </button>
+                        {% endif %}
+
                     </form>
 
                 </div>
@@ -68,7 +102,6 @@
             </div>
 
         </div>
-
     </div>
 
 </div>

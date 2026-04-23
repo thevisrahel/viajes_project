@@ -33,18 +33,46 @@ LISTA DE VIAJES
 
                 <div class="card shadow-sm h-100">
 
+                    <!-- 🖼 IMAGEN -->
+                    {% if viaje.imagen %}
+                        <img src="{{ viaje.imagen.url }}"
+                             class="card-img-top"
+                             style="height: 200px; object-fit: cover;">
+                    {% endif %}
+
                     <div class="card-body">
 
+                        <!-- 🧠 TITULO (sitio o región) -->
                         <h5 class="card-title">
                             <a href="{% url 'viajes_app:detalle_viaje' viaje.id %}"
-                               class="text-decoration-none">
-                                {{ viaje.destino }}
+                               class="text-decoration-none text-dark">
+
+                                {% if viaje.sitio_turistico %}
+                                    {{ viaje.sitio_turistico }}
+                                {% else %}
+                                    {{ viaje.region }}
+                                {% endif %}
+
                             </a>
                         </h5>
 
+                        <!-- 🌍 PAÍS -->
                         <p class="text-muted mb-1">
-                            {{ viaje.fecha }}
+                            🌍 {{ viaje.pais|default:"No especificado" }}
                         </p>
+
+                        <!-- 📅 FECHA + ❤️ LIKES -->
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <p class="text-muted small mb-0">
+                                📅 {{ viaje.fecha|date:"d M Y" }}
+                            </p>
+
+                            <small class="text-muted">
+                                ❤️ {{ viaje.likes.count }}
+                            </small>
+
+                        </div>
 
                     </div>
 

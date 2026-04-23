@@ -1,23 +1,45 @@
 {% extends 'base.html' %}
 
-{% block texto_pestania  %}
+{% block texto_pestania %}
     Subir Fotos
-{% endblock  %}
+{% endblock %}
 
-{% block header_h1%}
+{% block header_h1 %}
     SUBIR FOTOS
 {% endblock %}
 
 {% block contenido %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container mt-5" style="max-width: 600px;">
 
-    <input type="file" name="imagen" multiple>
+    <div class="card shadow-sm p-4">
 
-    <br><br>
+        <h4 class="mb-3 text-center">Selecciona las imágenes</h4>
 
-    <button type="submit">Subir</button>
-</form>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Imágenes</label>
+                <input type="file" name="imagen" multiple class="form-control">
+                <div class="form-text">
+                    Puedes seleccionar varias fotos a la vez.
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-2">
+                Subir fotos
+            </button>
+
+        </form>
+
+        <!-- 🔙 Botón volver -->
+        <a href="{% url 'viajes_app:detalle_viaje' viaje.id %}" class="btn btn-outline-secondary w-100">
+            Volver al detalle del viaje
+        </a>
+
+    </div>
+
+</div>
 
 {% endblock %}

@@ -25,34 +25,63 @@
         <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
     <div class="container px-4 px-lg-5">
+        
         <a class="navbar-brand" href="{% url 'viajes_app:inicio' %}">
             Inicio
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
             Menu
             <i class="fas fa-bars"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+
+            <form class="d-flex ms-auto me-3" method="GET" action="{% url 'usuarios:buscar_usuarios' %}">
+                <input 
+                    class="form-control search-input"
+                    type="search" 
+                    name="q" 
+                    placeholder="Buscar usuarios..." 
+                    required
+                >
+            </form>
+
+            <ul class="navbar-nav py-4 py-lg-0">
+                
                 <li class="nav-item">
                     <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'viajes_app:crear_viaje' %}">
                         Crear Viaje
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'viajes_app:listar_viajes' %}">
                         Lista de Viajes
                     </a>
                 </li>
+
                 {% if request.user.is_authenticated %}
+
                     <li class="nav-item">
-                        <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url "usuarios:perfil" %}">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'usuarios:perfil' %}">
                             {{ request.user.username }}
                         </a>
                     </li>
+
+                    <!-- 🔔 NOTIFICACIONES -->
+                    <li class="nav-item">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4 position-relative" href="{% url 'usuarios:solicitudes' %}">
+                            <i class="fas fa-bell"></i>
+                            {% if solicitudes_pendientes_count > 0 %}
+                                <span class="position-absolute badge rounded-pill bg-danger"
+                                    style="font-size:0.6rem; top: 8px; right: -4px;">
+                                    {{ solicitudes_pendientes_count }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4"
                         href="#"
@@ -64,19 +93,24 @@
                             {% csrf_token %}
                         </form>
                     </li>
+
                 {% else %}
+
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'usuarios:iniciar_sesion' %}">
                             Iniciar Sesión
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'usuarios:registro' %}">
                             Registrarse
                         </a>
                     </li>
+
                 {% endif %}
             </ul>
+
         </div>
     </div>
 </nav>

@@ -10,22 +10,47 @@
 
 {% block contenido %}
 
-<div class="container mt-5" style="max-width: 600px;">
+<div class="container mt-5" style="max-width: 650px;">
 
-    <div class="card shadow-sm p-4">
+    <div class="card shadow-sm border-0 p-4">
+
 
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
             {% for field in form %}
-                <div class="mb-3">
+                <div class="mb-4">
 
-                    <label class="form-label">{{ field.label }}</label>
+                    <!-- LABEL -->
+                    <label class="form-label fw-semibold d-block">
+                        {{ field.label }}
 
-                    {{ field }}
+                        {% if field.field.required %}
+                            <span class="text-danger">*</span>
+                        {% endif %}
+                    </label>
 
+                    <!-- INPUT -->
+                    <div>
+                        {{ field }}
+                    </div>
+
+                    <!-- AYUDA -->
+                    {% if field.help_text %}
+                        <small class="text-muted d-block mt-1">
+                            {{ field.help_text }}
+                        </small>
+                    {% endif %}
+
+                    {% if field.name == "sitio_turistico" %}
+                        <small class="text-muted d-block">
+                            (opcional)
+                        </small>
+                    {% endif %}
+
+                    <!-- ERRORES -->
                     {% if field.errors %}
-                        <div class="text-danger small">
+                        <div class="text-danger small mt-1">
                             {{ field.errors|striptags }}
                         </div>
                     {% endif %}
@@ -33,16 +58,19 @@
                 </div>
             {% endfor %}
 
-            <button type="submit" class="btn btn-success w-100">
-                Guardar viaje
-            </button>
+            <!-- BOTÓN -->
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-success">
+                    Guardar viaje
+                </button>
+            </div>
 
         </form>
 
     </div>
 
     {% if mensaje %}
-        <div class="alert alert-info mt-3 text-center">
+        <div class="alert alert-info mt-4 text-center">
             {{ mensaje }}
         </div>
     {% endif %}

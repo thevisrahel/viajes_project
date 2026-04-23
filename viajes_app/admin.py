@@ -1,10 +1,11 @@
 from django.contrib import admin
-from viajes_app.models import Viaje
+from .models import Viaje
 
 
+class ViajeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'propietario', 'region', 'sitio_turistico', 'fecha']
+    list_filter = ['region', 'fecha']
+    search_fields = ['region', 'sitio_turistico']
 
-class ProductoAdmin(admin. ModelAdmin):
-    list_display = ['destino', 'descripcion','fecha']
-    list_filter = ['destino', 'fecha']
 
-admin.site.register(Viaje, ProductoAdmin)
+admin.site.register(Viaje, ViajeAdmin)

@@ -2,71 +2,129 @@
 {% load static %}
 
 {% block texto_pestania %}
-Detalle de viaje
+    Detalle de viaje
 {% endblock %}
 
 {% block header_imagen %}
-{% if viaje.imagen %}
-{{ viaje.imagen.url }}
-{% else %}
-{% static 'assets/img/about-bg.jpg' %}
-{% endif %}
+    {% if viaje.imagen %}
+        {{ viaje.imagen.url }}
+    {% else %}
+        {% static 'assets/img/about-bg.jpg' %}
+    {% endif %}
 {% endblock %}
 
 {% block header_h1 %}
-Viaje: {{ viaje.destino }}
+    Viaje:
+    {% if viaje.sitio_turistico %}
+        {{ viaje.sitio_turistico }}
+    {% else %}
+        {{ viaje.region }}
+    {% endif %}
 {% endblock %}
 
 {% block contenido %}
 
 <div class="container mt-4">
 
-    <!-- INFO DEL VIAJE -->
-    <div class="card shadow-sm p-4 mb-4">
+    <!-- ================= INFO VIAJE ================= -->
+    <div class="card shadow-sm border-0 p-4 mb-4">
 
-        <h4>Información del viaje</h4>
+        <h4 class="mb-3">Información del viaje</h4>
 
-        <p><strong>Descripción:</strong> {{ viaje.descripcion }}</p>
-        <p><strong>Fecha:</strong> {{ viaje.fecha }}</p>
+        <p class="mb-3">
+            <strong>Descripción:</strong><br>
+            <span class="text-muted">
+                {{ viaje.descripcion|default:"Sin descripción" }}
+            </span>
+        </p>
+
+        <!-- INFO INLINE -->
+        <div class="row justify-content-center align-items-center text-center mt-3">
+
+            <!-- PAÍS -->
+            <div class="col-md-3 mb-3">
+                <strong>🌎 País</strong><br>
+                <span class="text-muted">
+                    {{ viaje.pais|default:"No especificado" }}
+                </span>
+            </div>
+
+            <!-- LIKE -->
+            <div class="col-md-2 mb-3 d-flex justify-content-center">
+                <form action="{% url 'viajes_app:toggle_like' viaje.id %}"
+                      method="post"
+                      class="d-flex flex-column align-items-center">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            style="border:none; background:none; font-size:26px; cursor:pointer; transition:0.2s;"
+                            onmouseover="this.style.transform='scale(1.2)'"
+                            onmouseout="this.style.transform='scale(1)'">
+
+                        <span style="color: red;">❤️</span>
+
+                    </button>
+
+                    <span class="text-muted small mt-1">
+                        {{ viaje.likes.count }}
+                    </span>
+                </form>
+            </div>
+
+            <!-- FECHA -->
+            <div class="col-md-3 mb-3">
+                <strong>📅 Fecha</strong><br>
+                <span class="text-muted">
+                    {{ viaje.fecha|date:"d M Y" }}
+                </span>
+            </div>
+
+        </div>
 
     </div>
+    <!-- ============== FIN INFO VIAJE ============== -->
 
-    <!-- FOTOS -->
-    <div class="card shadow-sm p-4">
 
+    <!-- ================= FOTOS ================= -->
+    <div class="card shadow-sm border-0 p-4">
+
+        <!-- HEADER -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4>Fotos del viaje</h4>
+            <h4 class="mb-0">Fotos del viaje</h4>
 
             <a href="{% url 'fotos:subir' viaje.id %}"
                class="btn btn-primary btn-sm">
-                Subir foto
+                + Subir foto
             </a>
         </div>
 
         {% if viaje.foto_set.all %}
 
-            <div class="row">
+            <div class="row g-3">
 
                 {% for foto in viaje.foto_set.all %}
-                    <div class="col-md-4 mb-4">
+                    <div class="col-12 col-md-6 col-lg-4">
 
                         <div class="card h-100 shadow-sm">
 
                             <img src="{{ foto.imagen.url }}"
                                  class="card-img-top"
-                                 style="height: 200px; object-fit: cover;">
+                                 style="height: 220px; object-fit: cover;">
 
                             <div class="card-body">
 
-                                <p class="card-text">
-                                    {{ foto.descripcion }}
-                                </p>
+                                {% if foto.descripcion %}
+                                    <p class="card-text text-muted small mb-3">
+                                        {{ foto.descripcion }}
+                                    </p>
+                                {% endif %}
 
+                                <!-- DELETE -->
                                 <form action="{% url 'fotos:eliminar_foto' foto.id %}"
                                       method="post">
                                     {% csrf_token %}
                                     <button type="submit"
-                                            class="btn btn-danger btn-sm w-100">
+                                            class="btn btn-outline-danger btn-sm w-100">
                                         Eliminar
                                     </button>
                                 </form>
@@ -81,10 +139,15 @@ Viaje: {{ viaje.destino }}
             </div>
 
         {% else %}
-            <p class="text-muted">No hay fotos aún</p>
+
+            <div class="alert alert-light text-center text-muted">
+                📷 No hay fotos aún en este viaje
+            </div>
+
         {% endif %}
 
     </div>
+    <!-- ============== FIN FOTOS ============== -->
 
 </div>
 
