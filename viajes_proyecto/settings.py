@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent                               
 DEBUG = True                                                                                # True = modo desarrollo (muestra errores detallados). False = modo producción (oculta errores al usuario)
 
 
-ALLOWED_HOSTS = []                                                                          # Lista de dominios que pueden acceder al proyecto
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']                                                                          # Lista de dominios que pueden acceder al proyecto
 
 INSTALLED_APPS = [                                                                          # Apps propias de Django
     'django.contrib.admin',                                                                 # Panel de administración
@@ -32,6 +32,7 @@ INSTALLED_APPS = [                                                              
     'django.contrib.sessions',                                                              # Manejo de sesiones de usuario
     'django.contrib.messages',                                                              # Mensajes flash (ej: "guardado con éxito")
     'django.contrib.staticfiles',                                                           # Manejo de archivos CSS, JS, imágenes
+    'widget_tweaks',
     'viajes_app',                                                                           # App del proyecto
     'fotos_app',                                                                            # App del proyecto
     'usuarios',                                                                             # App del proyecto
@@ -96,13 +97,22 @@ MEDIA_ROOT = BASE_DIR / 'media'                                                 
 
 LOGIN_URL = "/usuarios/iniciar-sesion/"                                                     # Si un usuario no logueado intenta entrar a una vista protegida, Django lo redirige a esta URL
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'                               # Usa SMTP real para enviar correos
-EMAIL_HOST = 'smtp.gmail.com'                                                               # Servidor de Gmail
-EMAIL_PORT = 587                                                                            # Puerto estándar para TLS
-EMAIL_USE_TLS = True                                                                        # Encripta la conexión con el servidor de correo
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'                               # Usa SMTP real para enviar correos
+# EMAIL_HOST = 'smtp.gmail.com'                                                               # Servidor de Gmail
+# EMAIL_PORT = 587                                                                            # Puerto estándar para TLS
+# EMAIL_USE_TLS = True                                                                        # Encripta la conexión con el servidor de correo
 
 
-SECRET_KEY = os.getenv('SECRET_KEY')                                                        # Clave secreta para encriptar sesiones, tokens, etc.
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')                                              # Tu correo de Gmail
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')                                      # Contraseña de aplicación de Gmail
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')                                           # Correo que aparece como remitente
+
+# SECRET_KEY = os.getenv('SECRET_KEY')                                                        # Clave secreta para encriptar sesiones, tokens, etc.
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')                                              # Tu correo de Gmail
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')                                      # Contraseña de aplicación de Gmail
+# DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')                                           # Correo que aparece como remitente
+
+# Para desarrollo y pruebas
+EMAIL_BACKEND = 'viajes_proyecto.email_backend.PlainConsoleEmailBackend'                      # Backend sin quoted-printable
+SECRET_KEY = 'django-insecure-e2v1q6tlsv1_qgzu&w@k!choewt@js8ul*gj5!73xd0w&m2672'             # Clave secreta del proyecto
+DEFAULT_FROM_EMAIL = 'noreply@tuweb.com'                                                      # Remitente que aparece en el correo
+PASSWORD_RESET_TIMEOUT = 86400                                                                # 24 horas
+SESSION_COOKIE_AGE = 86400                                                                    # Sesión dura 24 horas
+SESSION_SAVE_EVERY_REQUEST = True      

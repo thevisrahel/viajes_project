@@ -2,7 +2,9 @@ from django import forms                                                        
 from django.contrib.auth.forms import (                                                           # Importa los formularios base de Django para autenticación
     UserCreationForm,                                                                             # Formulario base para crear usuarios
     PasswordChangeForm,                                                                           # Formulario base para cambiar contraseña
-    AuthenticationForm                                                                            # Formulario base para login
+    AuthenticationForm,                                                                           # Formulario base para login
+    SetPasswordForm,                                                                              # Formulario base para resetear contraseña desde link
+    PasswordResetForm,                                                                            # Formulario base para solicitar reset por email
 )
 from django.contrib.auth.models import User                                                       # Importa el modelo User de Django
 from .models import InfoExtra                                                                     # Importa el modelo InfoExtra para acceder a los datos extra del perfil
@@ -26,6 +28,7 @@ class LoginForm(AuthenticationForm):                                            
             "class": "form-control",
             "placeholder": "Introduce tu contraseña"
         })
+
 
 class CreacionUsuario(UserCreationForm):                                                          # Extiende el formulario de creación de usuarios de Django
     class Meta:
@@ -59,6 +62,7 @@ class CreacionUsuario(UserCreationForm):                                        
         super().__init__(*args, **kwargs)                                                         # Llama al constructor original de Django
         for field in self.fields.values():                                                        # Elimina los textos de ayuda que Django agrega por defecto
             field.help_text = ""
+
 
 class ActualizarUsuario(forms.ModelForm):                                                         # Formulario para actualizar datos del usuario y su InfoExtra
 
@@ -146,3 +150,36 @@ class CambiarPassword(PasswordChangeForm):                                      
         for field, label in labels.items():                                                       # Aplica etiquetas y widgets a cada campo
             self.fields[field].label = label
             self.fields[field].widget = widgets[field]
+
+
+class ResetPasswordForm(SetPasswordForm):                                                         # Formulario para resetear contraseña desde el link del correo
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)                                                         # Llama al constructor original de Django
+
+        for field in self.fields.values():                                                        # Elimina los textos de ayuda que Django agrega por defecto
+            field.help_text = ""
+
+        labels = {                                                                                # Etiquetas en español para cada campo
+            "new_password1": "Nueva contraseña",
+            "new_password2": "Confirmar contraseña",
+        }
+        widgets = {                                                                               # Agrega clase Bootstrap a cada campo
+            "new_password1": forms.PasswordInput(attrs={"class": "form-control"}),
+            "new_password2": forms.PasswordInput(attrs={"class": "form-control"}),
+        }
+
+        for field, label in labels.items():                                                       # Aplica etiquetas y widgets a cada campo
+            self.fields[field].label = label
+            self.fields[field].widget = widgets[field]
+
+
+class PasswordResetEmailForm(PasswordResetForm):                                                  # Formulario para solicitar reset de contraseña con estilos Bootstrap
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)                                                         # Llama al constructor original de Django
+
+        self.fields['email'].widget = forms.EmailInput(attrs={                                    # Aplica clase Bootstrap al campo email
+            'class': 'form-control',
+            'placeholder': 'Ingresa tu correo electrónico'
+        })
+        self.fields['email'].label = 'Correo electrónico'                                        # Etiqueta en español
+        self.fields['email'].help_text = ''                                                       # Elimina el texto de ayuda por defecto
