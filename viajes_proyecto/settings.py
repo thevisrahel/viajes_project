@@ -42,6 +42,7 @@ INSTALLED_APPS = [                                                              
 
 MIDDLEWARE = [                                                                              # Capas que procesan cada petición ANTES y DESPUÉS de llegar a tu código. El orden importa: se ejecutan de arriba a abajo en la petición, y de abajo a arriba en la respuesta.
     'django.middleware.security.SecurityMiddleware',                                        # Protecciones de seguridad (HTTPS, etc.)
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',                                 # Activa el sistema de sesiones
     'django.middleware.common.CommonMiddleware',                                            # Normaliza URLs (ej: agrega slash final)
     'django.middleware.csrf.CsrfViewMiddleware',                                            # Protege formularios contra ataques CSRF
@@ -116,3 +117,5 @@ DEFAULT_FROM_EMAIL = 'noreply@tuweb.com'                                        
 PASSWORD_RESET_TIMEOUT = 86400                                                                # 24 horas
 SESSION_COOKIE_AGE = 86400                                                                    # Sesión dura 24 horas
 SESSION_SAVE_EVERY_REQUEST = True      
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
