@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404                
 from .models import Viaje, Like                                                                                         # Importamos los modelos
 from .forms import ViajeForm                                                                                            # Importamos el formulario
 from django.contrib.auth.decorators import login_required                                                               # Para proteger vistas (solo usuarios logueados)
+from django.db.models import Q
 
 
 def inicio(request):                                                                                                    # Renderiza la página principal
@@ -28,21 +29,24 @@ def crear_viaje(request):
         'form': form,                                                                                                   # Le envío al HTML: el formulario
     })
     
-@login_required                                                                                                         # Solo usuarios autenticados pueden acceder
+@login_required
 def listar_viajes(request):
-    query = request.GET.get('q')                                                                                        # Obtiene el valor del parámetro q de la URL. Si no existe ese parámetro, retorna None en lugar de lanzar un error, request.GET es un diccionario con todos los parámetros de la URL
+    query = request.GET.get('q')
 
-    if query:                                                                                                           # Si el usuario escribió algo en el buscador
+    if query:
         viajes = Viaje.objects.filter(
-            propietario=request.user,                                                                                   # Que pertenezcan al usuario actual
-            destino__icontains=query                                                                                    # Que el destino contenga el texto buscado (sin distinguir mayúsculas)
+            propietario=request.user
+        ).filter(
+            Q(sitio_turistico__icontains=query) |
+            Q(region__icontains=query) |
+            Q(pais__icontains=query)
         )
-    else:                                                                                                               # Si no hay búsqueda activa
-        viajes = Viaje.objects.filter(propietario=request.user)                                                         # Trae todos los viajes del usuario
+    else:
+        viajes = Viaje.objects.filter(propietario=request.user)
 
-    return render(request, 'viajes_app/listar_viajes.html', {                                                           # Renderiza el template HTML
-        'viajes': viajes,                                                                                               # El queryset con los resultados para mostrar en la lista
-        'query': query                                                                                                  # El texto buscado, para mostrarlo en el campo de búsqueda del template
+    return render(request, 'viajes_app/listar_viajes.html', {
+        'viajes': viajes,
+        'query': query
     })
     
 @login_required                                                                                                         # Solo usuarios autenticados pueden acceder

@@ -1,102 +1,102 @@
-{% extends 'base.html' %}                                                  {# Hereda la estructura del template base #}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block texto_pestania %}                                                 {# Bloque para el título de la pestaña #}
+{% block texto_pestania %}
     Perfil de {{ usuario.username }}
 {% endblock %}
 
-{% block header_h1 %}                                                      {# Bloque para el título principal de la página #}
-    PERFIL DE {{ usuario.username|upper }}                                 {# Username en mayúsculas #}
+{% block header_h1 %}
+    PERFIL DE {{ usuario.username|upper }}
 {% endblock %}
 
-{% block contenido %}                                                      {# Bloque principal de contenido #}
+{% block contenido %}
 
 <div class="container mt-4">
 
     <!-- PERFIL -->
-    <div class="card shadow-sm border-0 p-4 text-center mb-5">            {# Tarjeta principal del perfil #}
+    <div class="card shadow-sm border-0 p-4 text-center mb-5">
 
         <!-- AVATAR -->
-        {% if usuario.info and usuario.info.avatar %}                      {# Si el usuario tiene avatar #}
+        {% if usuario.info and usuario.info.avatar %}
             <img src="{{ usuario.info.avatar.url }}"
-                 class="rounded-circle mx-auto mb-3"
-                 width="140" height="140"
-                 style="object-fit: cover;">                               {# Imagen circular del avatar #}
-        {% else %}                                                         {# Si no tiene avatar #}
+                class="rounded-circle mx-auto mb-3"
+                width="140" height="140"
+                style="object-fit: cover;">
+        {% else %}
             <div class="rounded-circle bg-secondary mx-auto mb-3 d-flex align-items-center justify-content-center text-white"
-                 style="width:140px;height:140px;font-size:2rem;">
-                {{ usuario.username|first|upper }}                         {# Muestra la primera letra del username #}
+                style="width:140px;height:140px;font-size:2rem;font-weight:bold;">
+                {{ usuario.first_name|slice:":1"|upper }}{{ usuario.last_name|slice:":1"|upper }}
             </div>
         {% endif %}
-
         <!-- NOMBRE -->
-        <h3 class="mb-1">{{ usuario.username }}</h3>                      {# Nombre de usuario #}
+        <h3 class="mb-1">{{ usuario.username }}</h3>
 
-        {% if usuario.first_name or usuario.last_name %}                   {# Si tiene nombre o apellido registrado #}
+        {% if usuario.first_name or usuario.last_name %}
             <p class="text-muted mb-2">
-                {{ usuario.first_name }} {{ usuario.last_name }}           {# Nombre completo #}
+                {{ usuario.first_name }} {{ usuario.last_name }}
             </p>
         {% endif %}
 
-        {% if usuario.info and usuario.info.bio %}                         {# Si tiene biografía #}
+        {% if usuario.info and usuario.info.bio %}
             <p class="text-muted small mb-3">
-                {{ usuario.info.bio }}                                     {# Texto de la biografía #}
+                {{ usuario.info.bio }}
             </p>
         {% endif %}
 
         <!-- STATS -->
-        <div class="d-flex justify-content-center gap-5 my-3">            {# Contenedor de estadísticas #}
+        <div class="d-flex justify-content-center gap-5 my-3">
 
             <div>
-                <a href="{% url 'social:lista_seguidores' usuario.username %}" class="text-decoration-none text-dark"> {# Link a la lista de seguidores #}
-                    <h6 class="mb-0">{{ seguidores }}</h6>                 {# Cantidad de seguidores #}
+                <a href="{% url 'social:lista_seguidores' usuario.username %}" class="text-decoration-none text-dark">
+                    <h6 class="mb-0">{{ seguidores }}</h6>
                     <small class="text-muted">Seguidores</small>
                 </a>
             </div>
 
             <div>
-                <a href="{% url 'social:lista_siguiendo' usuario.username %}" class="text-decoration-none text-dark"> {# Link a la lista de seguidos #}
-                    <h6 class="mb-0">{{ siguiendo }}</h6>                  {# Cantidad de seguidos #}
+                <a href="{% url 'social:lista_siguiendo' usuario.username %}" class="text-decoration-none text-dark">
+                    <h6 class="mb-0">{{ siguiendo }}</h6>
                     <small class="text-muted">Siguiendo</small>
                 </a>
             </div>
 
         </div>
 
-        <hr>                                                               {# Separador visual #}
+        <hr>
 
         <!-- ACCIONES -->
-        {% if request.user != usuario and request.user.is_authenticated %} {# Solo muestra acciones si es otro usuario autenticado #}
+        {% if request.user != usuario and request.user.is_authenticated %}
 
-            <div class="d-flex justify-content-center gap-2 flex-wrap">   {# Contenedor de botones de acción #}
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                {% if es_seguidor %}                                       {# Si ya sigue al usuario #}
+                {% if es_seguidor %}
 
                     <form action="{% url 'social:dejar_de_seguir' usuario.username %}" method="post">
-                        {% csrf_token %}                                    {# Token de seguridad #}
+                        {% csrf_token %}
                         <button class="btn btn-outline-danger btn-sm">
                             Dejar de seguir
                         </button>
                     </form>
 
-                {% elif solicitud_pendiente %}                             {# Si hay una solicitud enviada pendiente #}
+                {% elif solicitud_pendiente %}
 
                     <button class="btn btn-secondary btn-sm" disabled>
-                        ⏳ Solicitud pendiente                             {# Botón deshabilitado mientras espera respuesta #}
+                        ⏳ Solicitud pendiente
                     </button>
 
                     <form action="{% url 'social:dejar_de_seguir' usuario.username %}" method="post">
-                        {% csrf_token %}                                    {# Token de seguridad #}
+                        {% csrf_token %}
                         <button class="btn btn-outline-secondary btn-sm">
-                            Cancelar solicitud                             {# Permite cancelar la solicitud enviada #}
+                            Cancelar solicitud
                         </button>
                     </form>
 
-                {% else %}                                                 {# Si no sigue y no hay solicitud pendiente #}
+                {% else %}
 
                     <form action="{% url 'social:seguir' usuario.username %}" method="post">
-                        {% csrf_token %}                                    {# Token de seguridad #}
+                        {% csrf_token %}
                         <button class="btn btn-primary btn-sm">
-                            Seguir                                         {# Botón para enviar solicitud de seguimiento #}
+                            Seguir
                         </button>
                     </form>
 
@@ -107,16 +107,16 @@
         {% endif %}
 
         <!-- PRIVACIDAD -->
-        {% if request.user == usuario %}                                   {# Solo muestra el toggle si es el dueño del perfil #}
+        {% if request.user == usuario %}
 
             <form action="{% url 'usuarios:toggle_privacidad' %}" method="post" class="mt-3">
-                {% csrf_token %}                                            {# Token de seguridad #}
+                {% csrf_token %}
 
-                {% if es_privado %}                                        {# Si el perfil es privado #}
+                {% if es_privado %}
                     <button class="btn btn-warning btn-sm">
                         🔒 Perfil privado — hacerlo público
                     </button>
-                {% else %}                                                 {# Si el perfil es público #}
+                {% else %}
                     <button class="btn btn-outline-secondary btn-sm">
                         🌐 Perfil público — hacerlo privado
                     </button>
@@ -129,60 +129,56 @@
     </div>
 
     <!-- VIAJES -->
-    {% if es_privado and not es_seguidor and request.user != usuario %}    {# Si el perfil es privado y no tiene acceso #}
+    {% if es_privado and not es_seguidor and request.user != usuario %}
 
         <div class="alert alert-warning text-center">
-            🔒 Este perfil es privado. Sigue a este usuario para ver sus viajes. {# Mensaje de perfil privado #}
+            🔒 Este perfil es privado. Sigue a este usuario para ver sus viajes.
         </div>
 
-    {% else %}                                                             {# Si tiene acceso al contenido #}
+    {% else %}
 
-        <h4 class="mb-4">Viajes de {{ usuario.username }}</h4>            {# Título de la sección de viajes #}
+        <h4 class="mb-4">Viajes de {{ usuario.username }}</h4>
 
         <div class="row">
 
-            {% for viaje in viajes %}                                      {# Itera sobre los viajes del usuario #}
+            {% for viaje in viajes %}
                 <div class="col-md-4 mb-4">
 
-                    <div class="card shadow-sm h-100 position-relative">  {# Tarjeta de cada viaje #}
+                    <div class="card shadow-sm h-100 position-relative">
 
-                        <!-- IMAGEN -->
-                        {% if viaje.imagen %}                              {# Si el viaje tiene imagen #}
+                        {% if viaje.imagen %}
                             <img src="{{ viaje.imagen.url }}"
                                  class="card-img-top"
-                                 style="height: 200px; object-fit: cover;"> {# Imagen del viaje #}
+                                 style="height: 200px; object-fit: cover;">
                         {% endif %}
 
                         <div class="card-body">
 
-                            <!-- TITULO -->
                             <h5 class="card-title">
                                 <a href="{% url 'social:detalle_viaje_publico' usuario.username viaje.id %}"
-                                   class="text-decoration-none text-dark"> {# Link al detalle del viaje #}
+                                   class="text-decoration-none text-dark">
 
-                                    {% if viaje.sitio_turistico %}         {# Si tiene sitio turístico registrado #}
-                                        {{ viaje.sitio_turistico }}        {# Muestra el sitio turístico #}
+                                    {% if viaje.sitio_turistico %}
+                                        {{ viaje.sitio_turistico }}
                                     {% else %}
-                                        {{ viaje.region }}                 {# Si no, muestra la región #}
+                                        {{ viaje.region }}
                                     {% endif %}
 
                                 </a>
                             </h5>
 
-                            <!-- PAIS -->
                             <p class="text-muted mb-1">
-                                🌍 {{ viaje.pais }}                        {# País del viaje #}
+                                🌍 {{ viaje.pais }}
                             </p>
 
-                            <!-- FECHA + LIKES -->
-                            <div class="d-flex justify-content-between align-items-center"> {# Contenedor fecha y likes #}
+                            <div class="d-flex justify-content-between align-items-center">
 
                                 <p class="text-muted small mb-0">
-                                    📅 {{ viaje.fecha|date:"d M Y" }}     {# Fecha formateada del viaje #}
+                                    📅 {{ viaje.fecha|date:"d M Y" }}
                                 </p>
 
                                 <small class="text-muted">
-                                    ❤️ {{ viaje.likes.count }}             {# Cantidad de likes del viaje #}
+                                    ❤️ {{ viaje.likes.count }}
                                 </small>
 
                             </div>
@@ -193,11 +189,11 @@
 
                 </div>
 
-            {% empty %}                                                    {# Si el usuario no tiene viajes #}
+            {% empty %}
 
                 <div class="col-12">
                     <p class="text-muted text-center">
-                        Este usuario no tiene viajes aún                   {# Mensaje cuando no hay viajes #}
+                        Este usuario no tiene viajes aún
                     </p>
                 </div>
 

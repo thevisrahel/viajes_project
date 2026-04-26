@@ -1,106 +1,106 @@
-{% extends 'base.html' %}                                                  {# Hereda la estructura del template base #}
-{% load static %}                                                          {# Carga la etiqueta para usar archivos estáticos #}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block texto_pestania %}                                                 {# Bloque para el título de la pestaña #}
+{% block texto_pestania %}
 About Me
 {% endblock %}
 
-{% block header_h1 %}                                                      {# Bloque para el título principal de la página #}
+{% block header_h1 %}
 About Me
 {% endblock %}
 
-{% block contenido %}                                                      {# Bloque principal de contenido #}
+{% block contenido %}
 
-<div class="row justify-content-center mt-5 mb-5">                        {# Fila centrada con márgenes verticales #}
-    <div class="col-md-10 col-lg-8 col-xl-7">                             {# Columna responsiva que se estrecha en pantallas grandes #}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-10 col-lg-8 col-xl-7">
 
         {# ── INTRO ── #}
-        <div class="card border mb-4 p-4 p-md-5 text-center">            {# Tarjeta de presentación centrada #}
-            <h2 class="mb-3">Elvis Labarca</h2>                           {# Nombre del desarrollador #}
-            <p class="text-muted">                                         {# Descripción personal y del proyecto #}
+        <div class="card border mb-4 p-4 p-md-5 text-center">
+            <h2 class="mb-3">Elvis Labarca</h2>
+            <p class="text-muted">
                 Desarrollador de software apasionado por construir productos que conectan personas.
                 Esta plataforma nació como un proyecto personal para explorar Django y crear algo
-                genuinamente útil: un espacio donde podés registrar tus viajes, compartirlos con
-                quien quieras y descubrir los de otros.
+                genuinamente útil: un espacio donde se pueden registrar viajes, compartirlos con
+                quien se desee y descubrir los de otras personas.
             </p>
-            <p class="fst-italic text-muted mt-2">                        {# Tagline en cursiva #}
+            <p class="fst-italic text-muted mt-2">
                 Una bitácora digital con alma de red social.
             </p>
         </div>
 
         {# ── FUNCIONALIDADES ── #}
-        <div class="card border mb-4 p-4 p-md-5">                         {# Tarjeta de funcionalidades #}
-            <h4 class="mb-4 text-center">¿Qué podés hacer?</h4>          {# Título de la sección #}
+        <div class="card border mb-4 p-4 p-md-5">
+            <h4 class="mb-4 text-center">¿Qué se puede hacer?</h4>
 
-            <div class="row g-3">                                          {# Grilla con separación entre columnas #}
+            <div class="row g-3">
 
-                <div class="col-md-6">                                     {# Columna de media pantalla en md+ #}
-                    <div class="d-flex align-items-start gap-3">          {# Contenedor flex con ícono y texto #}
-                        <span style="font-size:1.4rem;">🗺️</span>          {# Ícono de mapa #}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3">
+                        <span style="font-size:1.4rem;">🗺️</span>
                         <div>
-                            <strong>Publicar viajes</strong>               {# Título de la funcionalidad #}
-                            <p class="text-muted small mb-0">             {# Descripción breve #}
-                                Registrá destinos con país, región, descripción, fecha e imagen.
+                            <strong>Publicar viajes</strong>
+                            <p class="text-muted small mb-0">
+                                Registrar destinos con país, región, descripción, fecha e imagen.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">                                     {# Columna de media pantalla en md+ #}
-                    <div class="d-flex align-items-start gap-3">          {# Contenedor flex con ícono y texto #}
-                        <span style="font-size:1.4rem;">📸</span>          {# Ícono de cámara #}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3">
+                        <span style="font-size:1.4rem;">📸</span>
                         <div>
-                            <strong>Galería de fotos</strong>              {# Título de la funcionalidad #}
-                            <p class="text-muted small mb-0">             {# Descripción breve #}
-                                Subí múltiples fotos a cada viaje y construí una galería visual.
+                            <strong>Galería de fotos</strong>
+                            <p class="text-muted small mb-0">
+                                Subir múltiples fotos a cada viaje y construir una galería visual.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">                                     {# Columna de media pantalla en md+ #}
-                    <div class="d-flex align-items-start gap-3">          {# Contenedor flex con ícono y texto #}
-                        <span style="font-size:1.4rem;">👥</span>          {# Ícono de usuarios #}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3">
+                        <span style="font-size:1.4rem;">👥</span>
                         <div>
-                            <strong>Red social</strong>                    {# Título de la funcionalidad #}
-                            <p class="text-muted small mb-0">             {# Descripción breve #}
-                                Seguí a otros usuarios y aceptá solicitudes de seguimiento.
+                            <strong>Red social</strong>
+                            <p class="text-muted small mb-0">
+                                Seguir a otros usuarios y aceptar solicitudes de seguimiento.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">                                     {# Columna de media pantalla en md+ #}
-                    <div class="d-flex align-items-start gap-3">          {# Contenedor flex con ícono y texto #}
-                        <span style="font-size:1.4rem;">🔒</span>          {# Ícono de candado #}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3">
+                        <span style="font-size:1.4rem;">🔒</span>
                         <div>
-                            <strong>Privacidad</strong>                    {# Título de la funcionalidad #}
-                            <p class="text-muted small mb-0">             {# Descripción breve #}
-                                Elegí si tu perfil es público o privado con un solo clic.
+                            <strong>Privacidad</strong>
+                            <p class="text-muted small mb-0">
+                                Elegir si el perfil es público o privado con un solo clic.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">                                     {# Columna de media pantalla en md+ #}
-                    <div class="d-flex align-items-start gap-3">          {# Contenedor flex con ícono y texto #}
-                        <span style="font-size:1.4rem;">❤️</span>          {# Ícono de corazón #}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3">
+                        <span style="font-size:1.4rem;">❤️</span>
                         <div>
-                            <strong>Likes</strong>                         {# Título de la funcionalidad #}
-                            <p class="text-muted small mb-0">             {# Descripción breve #}
-                                Demostrá que te gustó el viaje de alguien con un like.
+                            <strong>Likes</strong>
+                            <p class="text-muted small mb-0">
+                                Demostrar interés en el viaje de alguien con un like.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">                                     {# Columna de media pantalla en md+ #}
-                    <div class="d-flex align-items-start gap-3">          {# Contenedor flex con ícono y texto #}
-                        <span style="font-size:1.4rem;">💬</span>          {# Ícono de comentario #}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3">
+                        <span style="font-size:1.4rem;">💬</span>
                         <div>
-                            <strong>Comentarios</strong>                   {# Título de la funcionalidad #}
-                            <p class="text-muted small mb-0">             {# Descripción breve #}
-                                Comentá en viajes y respondé con sistema de respuestas anidadas.
+                            <strong>Comentarios</strong>
+                            <p class="text-muted small mb-0">
+                                Comentar en viajes y responder con sistema de respuestas anidadas.
                             </p>
                         </div>
                     </div>
@@ -110,23 +110,23 @@ About Me
         </div>
 
         {# ── TECH STACK ── #}
-        <div class="card border mb-4 p-4 p-md-5 text-center">            {# Tarjeta del stack tecnológico #}
-            <h4 class="mb-4">Construido con</h4>                          {# Título de la sección #}
-            <div class="d-flex flex-wrap justify-content-center gap-2">   {# Contenedor flex con wrap para los badges #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🐍 Python 3.14</span>   {# Badge de Python #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🟩 Django 6.0</span>    {# Badge de Django #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🗄️ SQLite</span>        {# Badge de base de datos #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🎨 Bootstrap 5</span>   {# Badge de estilos #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">⭐ Font Awesome 6</span> {# Badge de íconos #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🖼️ Pillow</span>        {# Badge de procesamiento de imágenes #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">📧 SMTP Gmail</span>    {# Badge de envío de emails #}
-                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🔐 Django Auth</span>   {# Badge de autenticación #}
+        <div class="card border mb-4 p-4 p-md-5 text-center">
+            <h4 class="mb-4">Construido con</h4>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🐍 Python 3.14</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🟩 Django 6.0</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🗄️ SQLite</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🎨 Bootstrap 5</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">⭐ Font Awesome 6</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🖼️ Pillow</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">📧 SMTP Gmail</span>
+                <span class="badge rounded-pill border text-dark fw-normal px-3 py-2">🔐 Django Auth</span>
             </div>
         </div>
 
         {# ── VOLVER ── #}
-        <div class="text-center mb-5">                                     {# Contenedor centrado con margen inferior #}
-            <a href="{% url 'viajes_app:inicio' %}" class="btn btn-outline-secondary"> {# Link de vuelta al inicio #}
+        <div class="text-center mb-5">
+            <a href="{% url 'viajes_app:inicio' %}" class="btn btn-outline-secondary">
                 ← Volver al inicio
             </a>
         </div>

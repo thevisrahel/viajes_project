@@ -58,17 +58,15 @@ def actualizar_perfil(request):                                            # Vis
         'formulario': formulario                                           # Pasa el formulario al contexto
     })
 
-@login_required                                                            # Requiere autenticación
-def eliminar_avatar(request):                                              # Vista para eliminar el avatar del usuario
-    if request.method == "POST":                                           # Solo acepta POST
-        info = request.user.info                                           # Obtiene el perfil extendido del usuario
-        if info.avatar and info.avatar.name != 'avatars/default.png':     # Si tiene avatar personalizado
-            import os                                                      # Importa módulo del sistema operativo
-            if os.path.isfile(info.avatar.path):                          # Verifica que el archivo existe
-                os.remove(info.avatar.path)                               # Borra el archivo del disco
-        info.avatar = 'avatars/default.png'                               # Restaura el avatar por defecto
-        info.save()                                                        # Guarda los cambios en la BD
-    return redirect('usuarios:perfil')                                     # Redirige al perfil
+@login_required
+def eliminar_avatar(request):
+    if request.method == "POST":
+        info = request.user.info
+        if info.avatar:
+            info.avatar.delete(save=False)  # borra el archivo del disco
+            info.avatar = None              # limpia el campo en la BD
+            info.save()
+    return redirect('usuarios:perfil')
 
 class CambioDePass(PasswordChangeView):                                    # Vista basada en clase para cambiar contraseña
     template_name = 'usuarios/cambio_pass.html'                           # Template a usar

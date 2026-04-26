@@ -1,28 +1,28 @@
-{% extends "base.html" %}                                                   {# Hereda la estructura base del sitio (navbar, footer, etc.) #}
-{% load static %}                                                           {# Carga el sistema de archivos estáticos de Django #}
+{% extends "base.html" %}
+{% load static %}
 
-{% block texto_pestania %}                                                   {# Bloque para el título de la pestaña del navegador #}
+{% block texto_pestania %}
     Detalle de viaje
 {% endblock %}
 
 {% block header_imagen %}{% if viaje.imagen %}{{ viaje.imagen.url }}{% else %}{% static "assets/img/about-bg.jpg" %}{% endif %}{% endblock %}
 
-{% block header_h1 %}                                                        {# Bloque para el título del header #}
+{% block header_h1 %}
     Viaje:
-    {% if viaje.sitio_turistico %}                                           {# Si tiene sitio turístico lo muestra como título #}
+    {% if viaje.sitio_turistico %}
         {{ viaje.sitio_turistico }}
-    {% else %}                                                               {# Si no, muestra la región #}
+    {% else %}
         {{ viaje.region }}
     {% endif %}
 {% endblock %}
 
-{% block contenido %}                                                        {# Bloque principal donde va el contenido de la página #}
+{% block contenido %}
 
 <div class="container mt-4">
 
     {# BOTÓN VOLVER #}
     <div class="mb-4">
-        <a href="{% url 'social:ver_perfil' usuario.username %}"          {# URL del perfil público del propietario del viaje #}
+        <a href="{% url 'social:ver_perfil' usuario.username %}"
            class="btn btn-outline-secondary btn-sm">
             ← Volver al perfil de {{ usuario.username }}
         </a>
@@ -36,7 +36,7 @@
         <p class="mb-3">
             <strong>Descripción:</strong><br>
             <span class="text-muted">
-                {{ viaje.descripcion|default:"Sin descripción" }}            {# default muestra texto alternativo si la descripción está vacía #}
+                {{ viaje.descripcion|default:"Sin descripción" }}
             </span>
         </p>
 
@@ -46,32 +46,32 @@
             <div class="col-md-3 mb-3">
                 <strong>🌎 País</strong><br>
                 <span class="text-muted">
-                    {{ viaje.pais|default:"No especificado" }}               {# default muestra texto alternativo si el país está vacío #}
+                    {{ viaje.pais|default:"No especificado" }}
                 </span>
             </div>
 
             {# LIKE #}
             <div class="col-md-2 mb-3 d-flex justify-content-center">
-                <form action="{% url 'viajes_app:toggle_like' viaje.id %}"  {# URL del toggle like pasando el id del viaje #}
+                <form action="{% url 'viajes_app:toggle_like' viaje.id %}"
                       method="post"
                       class="d-flex flex-column align-items-center">
-                    {% csrf_token %}                                         {# Token de seguridad obligatorio en todo form POST de Django #}
+                    {% csrf_token %}
 
                     <button type="submit"
                             style="border:none; background:none; font-size:26px; cursor:pointer; transition:0.2s;"
-                            onmouseover="this.style.transform='scale(1.2)'" {# Efecto hover: agranda el corazón al pasar el mouse #}
-                            onmouseout="this.style.transform='scale(1)'">   {# Efecto hover: vuelve al tamaño normal al quitar el mouse #}
+                            onmouseover="this.style.transform='scale(1.2)'"
+                            onmouseout="this.style.transform='scale(1)'">
 
-                        {% if usuario_dio_like %}                            {# Si el usuario ya dio like muestra corazón rojo #}
+                        {% if usuario_dio_like %}
                             <span style="color: red;">❤️</span>
-                        {% else %}                                           {# Si no ha dado like muestra corazón gris #}
+                        {% else %}
                             <span style="color: gray;">🤍</span>
                         {% endif %}
 
                     </button>
 
                     <span class="text-muted small mt-1">
-                        {{ viaje.likes.count }}                              {# Muestra el total de likes del viaje #}
+                        {{ viaje.likes.count }}
                     </span>
 
                 </form>
@@ -81,68 +81,53 @@
             <div class="col-md-3 mb-3">
                 <strong>📅 Fecha</strong><br>
                 <span class="text-muted">
-                    {{ viaje.fecha|date:"d M Y" }}                           {# Formatea la fecha como: 24 Apr 2026 #}
+                    {{ viaje.fecha|date:"d M Y" }}
                 </span>
             </div>
 
         </div>
 
     </div>
-    {# ============== FIN INFO DEL VIAJE ============== #}
-
 
     {# ================= FOTOS ================= #}
     <div class="card shadow-sm border-0 p-4 mb-4">
 
         <h4 class="mb-3">Fotos del viaje</h4>
 
-        {% if viaje.foto_set.exists %}                                       {# foto_set.exists es más eficiente que foto_set.all para solo verificar si hay fotos #}
-
+        {% if viaje.foto_set.exists %}
             <div class="row g-3">
-
-                {% for foto in viaje.foto_set.all %}                         {# Recorre todas las fotos del viaje #}
-                    <div class="col-12 col-md-6 col-lg-4">                  {# 1 columna en móvil, 2 en tablet, 3 en desktop #}
-
+                {% for foto in viaje.foto_set.all %}
+                    <div class="col-12 col-md-6 col-lg-4">
                         <div class="card h-100 shadow-sm">
-
                             <img src="{{ foto.imagen.url }}"
                                  class="card-img-top"
-                                 style="height: 220px; object-fit: cover;"> {# object-fit:cover evita que la imagen se deforme #}
-
+                                 style="height: 220px; object-fit: cover;">
                             <div class="card-body">
-                                {% if foto.descripcion %}                    {# Solo muestra la descripción si la foto tiene una #}
+                                {% if foto.descripcion %}
                                     <p class="card-text text-muted small mb-0">
                                         {{ foto.descripcion }}
                                     </p>
                                 {% endif %}
                             </div>
-
                         </div>
-
                     </div>
-                {% endfor %}                                                 {# Fin del loop de fotos #}
-
+                {% endfor %}
             </div>
 
-        {% else %}                                                           {# Si no hay fotos muestra un mensaje informativo #}
-
+        {% else %}
             <div class="alert alert-light text-center text-muted">
                 📷 No hay fotos aún en este viaje
             </div>
-
         {% endif %}
 
     </div>
-    {# ============== FIN FOTOS ============== #}
-
 
     {# ================= COMENTARIOS ================= #}
     <div class="card shadow-sm border-0 p-4">
 
         <h4 class="mb-3">Comentarios</h4>
 
-        {# NUEVO COMENTARIO #}
-        {% if user.is_authenticated %}                                       {# Solo muestra el form de comentar si el usuario está logueado #}
+        {% if user.is_authenticated %}
         <form method="post" action="{% url 'comentarios:agregar' viaje.id %}" class="mb-4">
             {% csrf_token %}
             <div class="d-flex gap-2">
@@ -156,35 +141,32 @@
         </form>
         {% endif %}
 
-        {# LISTA DE COMENTARIOS #}
-        {% for comentario in viaje.comentarios.all %}                        {# Recorre todos los comentarios del viaje #}
-            {% if not comentario.padre %}                                    {# Solo muestra comentarios principales, no respuestas #}
+        {% for comentario in viaje.comentarios.all %}
+            {% if not comentario.padre %}
 
             <div class="card mb-3 p-3 w-100">
 
-                {# HEADER DEL COMENTARIO #}
                 <div class="d-flex justify-content-between align-items-center">
 
                     <div class="d-flex align-items-center">
-                        {% if comentario.usuario.info.avatar %}              {# Si el usuario tiene avatar lo muestra #}
+                        {% if comentario.usuario.info.avatar %}
                             <img src="{{ comentario.usuario.info.avatar.url }}"
                                  class="rounded-circle me-2"
                                  style="width:40px; height:40px; object-fit:cover;">
-                        {% else %}                                           {# Si no tiene avatar genera uno automático con sus iniciales #}
-                            <img src="https://ui-avatars.com/api/?name={{ comentario.usuario.username }}&size=40"
-                                 class="rounded-circle me-2"
-                                 style="width:40px; height:40px; object-fit:cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center text-white"
+                                 style="width:40px; height:40px; font-size:1rem; flex-shrink:0;">
+                                {{ comentario.usuario.first_name|slice:":1"|upper }}{{ comentario.usuario.last_name|slice:":1"|upper }}
+                            </div>
                         {% endif %}
-
                         <strong>{{ comentario.usuario.username }}</strong>
                     </div>
 
-                    {# BOTÓN ELIMINAR COMENTARIO — visible solo para el autor o el propietario del viaje #}
                     {% if user == comentario.usuario or user == viaje.propietario %}
                     <form method="post" action="{% url 'comentarios:eliminar' comentario.id %}">
                         {% csrf_token %}
                         <button class="btn btn-sm btn-danger"
-                                onclick="return confirm('¿Seguro que quieres eliminar este comentario?');">  {# Confirmación antes de eliminar #}
+                                onclick="return confirm('¿Seguro que quieres eliminar este comentario?');">
                             Eliminar
                         </button>
                     </form>
@@ -192,35 +174,32 @@
 
                 </div>
 
-                {# TEXTO DEL COMENTARIO #}
                 <p class="mt-2 mb-2">{{ comentario.texto }}</p>
 
-                {# RESPUESTAS AL COMENTARIO #}
-                {% for respuesta in comentario.respuestas.all %}             {# Recorre todas las respuestas del comentario #}
-                <div class="ms-4 border-start ps-3 mt-2">                   {# Indentado con borde izquierdo para indicar que es una respuesta #}
+                {% for respuesta in comentario.respuestas.all %}
+                <div class="ms-4 border-start ps-3 mt-2">
 
                     <div class="d-flex justify-content-between align-items-center">
 
                         <div class="d-flex align-items-center">
-                            {% if respuesta.usuario.info.avatar %}           {# Si el usuario tiene avatar lo muestra #}
+                            {% if respuesta.usuario.info.avatar %}
                                 <img src="{{ respuesta.usuario.info.avatar.url }}"
                                      class="rounded-circle me-2"
                                      style="width:30px; height:30px; object-fit:cover;">
-                            {% else %}                                       {# Si no tiene avatar genera uno automático con sus iniciales #}
-                                <img src="https://ui-avatars.com/api/?name={{ respuesta.usuario.username }}&size=30"
-                                     class="rounded-circle me-2"
-                                     style="width:30px; height:30px; object-fit:cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center text-white"
+                                     style="width:30px; height:30px; font-size:0.8rem; flex-shrink:0;">
+                                    {{ respuesta.usuario.first_name|slice:":1"|upper }}{{ respuesta.usuario.last_name|slice:":1"|upper }}
+                                </div>
                             {% endif %}
-
                             <strong>{{ respuesta.usuario.username }}</strong>
                         </div>
 
-                        {# BOTÓN ELIMINAR RESPUESTA — visible solo para el autor o el propietario del viaje #}
                         {% if user == respuesta.usuario or user == viaje.propietario %}
                         <form method="post" action="{% url 'comentarios:eliminar' respuesta.id %}">
                             {% csrf_token %}
                             <button class="btn btn-sm btn-danger"
-                                    onclick="return confirm('¿Seguro que quieres eliminar esta respuesta?');">  {# Confirmación antes de eliminar #}
+                                    onclick="return confirm('¿Seguro que quieres eliminar esta respuesta?');">
                                 Eliminar
                             </button>
                         </form>
@@ -231,14 +210,12 @@
                     <p class="mb-1">{{ respuesta.texto }}</p>
 
                 </div>
-                {% endfor %}                                                 {# Fin del loop de respuestas #}
+                {% endfor %}
 
-                {# FORM PARA RESPONDER AL COMENTARIO #}
-                {% if user.is_authenticated %}                               {# Solo muestra el form de responder si el usuario está logueado #}
+                {% if user.is_authenticated %}
                 <form method="post" action="{% url 'comentarios:agregar' viaje.id %}" class="mt-2">
                     {% csrf_token %}
-                    <input type="hidden" name="padre_id" value="{{ comentario.id }}">  {# Campo oculto que indica a qué comentario se responde #}
-
+                    <input type="hidden" name="padre_id" value="{{ comentario.id }}">
                     <div class="d-flex gap-2">
                         <input type="text"
                                name="texto"
@@ -253,10 +230,9 @@
             </div>
 
             {% endif %}
-        {% endfor %}                                                         {# Fin del loop de comentarios #}
+        {% endfor %}
 
     </div>
-    {# ============== FIN COMENTARIOS ============== #}
 
 </div>
 {% endblock %}

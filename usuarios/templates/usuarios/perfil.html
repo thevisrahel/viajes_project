@@ -1,117 +1,96 @@
-{% extends 'base.html' %}                                                  {# Hereda la estructura del template base #}
-
-{% block texto_pestania %}                                                 {# Bloque para el título de la pestaña #}
+{% extends 'base.html' %}
+{% block texto_pestania %}
     Perfil
 {% endblock %}
-
-{% block header_h1 %}                                                      {# Bloque para el título principal de la página #}
-    PERFIL DE "{{ user.username }}"                                        {# Muestra el nombre del usuario autenticado #}
+{% block header_h1 %}
+    PERFIL DE "{{ user.username }}"
 {% endblock %}
-
-{% block contenido %}                                                      {# Bloque principal de contenido #}
-
-<div class="container mt-5">                                               {# Contenedor principal con margen superior #}
-
-    <div class="row justify-content-center">                               {# Fila centrada horizontalmente #}
-        <div class="col-md-7 col-lg-6">                                    {# Columna responsiva #}
-
-            <div class="card shadow-sm border-0 p-4 text-center">         {# Tarjeta con sombra, sin borde, centrada #}
-
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow-sm border-0 p-4 text-center">
                 <!-- AVATAR -->
-                {% if user.info and user.info.avatar %}                    {# Si el usuario tiene info y avatar #}
-                    <img src="{{ user.info.avatar.url }}"                  {# URL de la imagen del avatar #}
-                         class="rounded-circle mx-auto mb-3"              {# Avatar circular y centrado #}
-                         width="120" height="120"
-                         style="object-fit: cover;">                       {# La imagen cubre el espacio sin deformarse #}
-                {% else %}                                                 {# Si no tiene avatar #}
-                    <div class="rounded-circle bg-secondary mx-auto mb-3"
-                         style="width:120px;height:120px;"></div>          {# Círculo gris como placeholder #}
-                    <small class="text-muted">Sin avatar</small>           {# Texto indicando que no hay avatar #}
+                {% if user.info and user.info.avatar %}
+                    <img src="{{ user.info.avatar.url }}"
+                        class="rounded-circle mx-auto mb-3"
+                        width="120" height="120"
+                        style="object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                        style="width:120px;height:120px;font-size:2rem;font-weight:bold;">
+                        {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+                    </div>
                 {% endif %}
-
                 <!-- NOMBRE -->
                 <h4 class="mb-1">
-                    {{ user.first_name }} {{ user.last_name }}             {# Nombre completo del usuario #}
+                    {{ user.first_name }} {{ user.last_name }}
                 </h4>
-                <p class="text-muted mb-3">{{ user.email }}</p>            {# Email del usuario #}
-
+                <p class="text-muted mb-3">{{ user.email }}</p>
                 <!-- ESTADÍSTICAS -->
-                <div class="d-flex justify-content-center gap-5 mb-3 text-center"> {# Contenedor flex para estadísticas #}
-
+                <div class="d-flex justify-content-center gap-5 mb-3 text-center">
                     <div>
-                        <a href="{% url 'social:lista_seguidores' user.username %}" {# Link a la lista de seguidores #}
+                        <a href="{% url 'social:lista_seguidores' user.username %}"
                            class="text-decoration-none text-dark d-block">
-                            <h6 class="mb-0">{{ seguidores }}</h6>         {# Cantidad de seguidores #}
+                            <h6 class="mb-0">{{ seguidores }}</h6>
                             <small class="text-muted">Seguidores</small>
                         </a>
                     </div>
-
                     <div>
-                        <a href="{% url 'social:lista_siguiendo' user.username %}" {# Link a la lista de siguiendo #}
+                        <a href="{% url 'social:lista_siguiendo' user.username %}"
                            class="text-decoration-none text-dark d-block">
-                            <h6 class="mb-0">{{ siguiendo }}</h6>          {# Cantidad de usuarios que sigue #}
+                            <h6 class="mb-0">{{ siguiendo }}</h6>
                             <small class="text-muted">Siguiendo</small>
                         </a>
                     </div>
-
                 </div>
-                <hr>                                                       {# Separador visual #}
-
+                <hr>
                 <!-- INFO -->
                 <p class="mb-2">
                     <strong>Fecha de nacimiento</strong><br>
                     <span class="text-muted">
-                        {{ user.info.fecha_nacimiento|default:"No registrada" }} {# Muestra la fecha o texto por defecto #}
+                        {{ user.info.fecha_nacimiento|default:"No registrada" }}
                     </span>
                 </p>
-
                 <!-- BOTONES -->
-                <div class="d-grid gap-2 mt-3">                            {# Contenedor de botones en columna con espacio #}
-
-                    <a href="{% url 'usuarios:actualizar_perfil' %}"       {# Link para editar el perfil #}
+                <div class="d-grid gap-2 mt-3">
+                    <a href="{% url 'usuarios:actualizar_perfil' %}"
                        class="btn btn-primary">
                         Actualizar perfil
                     </a>
-
-                    <a href="{% url 'usuarios:actualizar_password' %}"     {# Link para cambiar la contraseña #}
+                    <a href="{% url 'usuarios:actualizar_password' %}"
                        class="btn btn-outline-warning">
                         Cambiar contraseña
                     </a>
-
+                    {% if user.info and user.info.avatar %}
                     <form action="{% url 'usuarios:eliminar_avatar' %}" method="post"
-                          onsubmit="return confirm('¿Seguro que querés eliminar tu foto de perfil?');"> {# Confirmación antes de eliminar #}
-                        {% csrf_token %}                                    {# Token de seguridad del formulario #}
+                          onsubmit="return confirm('¿Seguro que querés eliminar tu foto de perfil?');">
+                        {% csrf_token %}
                         <button type="submit" class="btn btn-outline-danger w-100">
-                            Eliminar avatar                                 {# Botón para borrar el avatar #}
+                            Eliminar avatar
                         </button>
                     </form>
-
+                    {% endif %}
                     <!-- PRIVACIDAD -->
-                    <form action="{% url 'usuarios:toggle_privacidad' %}" method="post"> {# Formulario para cambiar privacidad #}
-                        {% csrf_token %}                                    {# Token de seguridad del formulario #}
-                        {% if user.info.es_privado %}                      {# Si el perfil es privado #}
+                    <form action="{% url 'usuarios:toggle_privacidad' %}" method="post">
+                        {% csrf_token %}
+                        {% if user.info.es_privado %}
                             <button type="submit" class="btn btn-warning w-100">
-                                🔒 Perfil privado — hacerlo público        {# Botón para hacer el perfil público #}
+                                🔒 Perfil privado — hacerlo público
                             </button>
-                        {% else %}                                         {# Si el perfil es público #}
+                        {% else %}
                             <button type="submit" class="btn btn-secondary w-100">
-                                🌐 Perfil público — hacerlo privado        {# Botón para hacer el perfil privado #}
+                                🌐 Perfil público — hacerlo privado
                             </button>
                         {% endif %}
                     </form>
-
-                    <a href="{% url 'usuarios:eliminar_perfil' %}"         {# Link para eliminar la cuenta #}
+                    <a href="{% url 'usuarios:eliminar_perfil' %}"
                        class="btn btn-outline-danger mt-2">
                         Eliminar perfil
                     </a>
-
                 </div>
-
             </div>
-
         </div>
     </div>
-
 </div>
-
 {% endblock %}
