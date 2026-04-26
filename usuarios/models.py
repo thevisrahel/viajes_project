@@ -15,7 +15,7 @@ class InfoExtra(models.Model):                                             # Mod
         upload_to="avatars/",                                              # Carpeta donde se guardan los avatars
         null=True,                                                         # Permite valor nulo en la BD
         blank=True,                                                        # Permite campo vacío en formularios
-        default="avatars/default.png"                                      # Imagen por defecto si no sube ninguna
+        default=None                                     
     )
     es_privado = models.BooleanField(default=False)                        # Si True, el perfil es privado
 
