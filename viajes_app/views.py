@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required                       
 from django.db.models import Q
 
 
+
+
 def inicio(request):                                                                                                    # Renderiza la página principal
     return render(request, 'viajes_app/inicio.html')
 

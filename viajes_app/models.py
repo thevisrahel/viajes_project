@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User                                                         # Modelo de usuario que trae Django por defecto
 from django.utils import timezone
+import os
+from django.dispatch import receiver
+from django.db.models.signals import post_delete
 
 class Viaje(models.Model):                                                                          # Representa un viaje publicado por un usuario
     propietario = models.ForeignKey(                                                                # ForeignKey = relación muchos a uno (un usuario puede tener muchos viajes)
@@ -57,3 +60,12 @@ class Like(models.Model):
 
     def __str__(self):                                                                              # Define cómo se muestra el objeto en: - Django admin - consola (print)
         return f'{self.user.username} ❤️ {self.viaje.titulo_mostrar()}'
+    
+    
+    
+    
+@receiver(post_delete, sender=Viaje)
+def borrar_imagen_viaje(sender, instance, **kwargs):
+    if instance.imagen:
+        if os.path.isfile(instance.imagen.path):
+            os.remove(instance.imagen.path)
